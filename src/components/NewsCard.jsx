@@ -3,7 +3,7 @@ import { FaEye } from "react-icons/fa6";
 import { Link } from "react-router-dom";
 
 const NewsCard = ({ news }) => {
-  const { author, details, image_url, rating, title, total_view } = news;
+  const { _id, author, details, image_url, rating, title, total_view } = news;
 
   return (
     <div>
@@ -58,7 +58,7 @@ const NewsCard = ({ news }) => {
               </button>
             </div>
           </div>
-          <Link>
+          <Link to={`/newsDetails/${_id}`}>
             <h2 className="mb-1 text-xl font-semibold underline">{title}</h2>
           </Link>
           <div>
@@ -70,7 +70,9 @@ const NewsCard = ({ news }) => {
 
             <p className="text-sm dark:text-gray-600">
               {details.slice(0, 200)}
-              <Link className="text-yellow-500 ml-2">Read More...</Link>
+              <Link to={`/newsDetails/${_id}`} className="text-yellow-500 ml-2">
+                Read More...
+              </Link>
             </p>
           </div>
           <div className="flex flex-wrap justify-between">
