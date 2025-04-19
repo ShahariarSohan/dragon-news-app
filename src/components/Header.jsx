@@ -13,7 +13,7 @@ const Header = () => {
       <h2 className="font-bold text-gray-400">
         {moment().format("dddd, MMMM D, YYYY")}
       </h2>
-      <div className=" w-full flex justify-start items-center  gap-5 p-3 bg-slate-300 font-bold">
+      <div className=" w-full flex justify-start items-center  gap-5 p-3 bg-slate-300 font-semibold">
         <div className="bg-[#D72050] p-2 px-4">
           <p className="text-white">Latest</p>
         </div>
