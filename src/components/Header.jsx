@@ -5,7 +5,7 @@ import Marquee from "react-fast-marquee";
 
 const Header = () => {
   return (
-    <div className=" flex flex-col items-center space-y-5 p-10">
+    <div className=" flex flex-col items-center space-y-5 py-10">
       <img className="" src={logo} alt="" />
       <h2 className="text-gray-400 text-lg">
         Journalism Without Fear or Favour
