@@ -1,19 +1,20 @@
 import React, { useContext, useRef } from "react";
 import Navbar from "../components/Navbar";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { AuthContext } from "../providers/AuthProvider";
 
 const Login = () => {
   const { logIn, resetPassword } = useContext(AuthContext);
   const emailRef = useRef();
   const navigate = useNavigate();
+  const location = useLocation();
   const handleLogin = (e) => {
     e.preventDefault();
     const email = e.target.email.value;
     const password = e.target.password.value;
 
     logIn(email, password)
-      .then(() => navigate("/"))
+      .then(() => navigate(`${location?.state ? location.state : "/"}`))
       .catch((error) => console.log(error.message));
   };
   const handleResetPassword = () => {
