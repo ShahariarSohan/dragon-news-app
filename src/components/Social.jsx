@@ -1,12 +1,18 @@
 import React, { useContext } from "react";
 import { AuthContext } from "../providers/AuthProvider";
-import { GoogleAuthProvider } from "firebase/auth";
+import {
+  GithubAuthProvider,
+  GoogleAuthProvider,
+  TwitterAuthProvider,
+} from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 
 const Social = () => {
   const { socialLogin } = useContext(AuthContext);
   const navigate = useNavigate();
   const googleProvider = new GoogleAuthProvider();
+  const githubProvider = new GithubAuthProvider();
+  const twitterProvider = new TwitterAuthProvider();
   const handleSocialLogin = (provider) => {
     socialLogin(provider)
       .then(() => {
@@ -51,7 +57,10 @@ const Social = () => {
           </svg>
           Login with Google
         </button>
-        <button className="w-full btn bg-black text-white border-black">
+        <button
+          onClick={() => handleSocialLogin(githubProvider)}
+          className="w-full btn bg-black text-white border-black"
+        >
           <svg
             aria-label="GitHub logo"
             width="16"
@@ -84,7 +93,10 @@ const Social = () => {
           </svg>
           Login with Facebook
         </button>
-        <button className="w-full btn bg-black text-white border-black">
+        <button
+          onClick={() => handleSocialLogin(twitterProvider)}
+          className="w-full btn bg-black text-white border-black"
+        >
           <svg
             aria-label="X logo"
             width="16"
