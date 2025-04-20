@@ -1,18 +1,39 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import Navbar from "../components/Navbar";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../providers/AuthProvider";
+import { FaEye, FaEyeSlash } from "react-icons/fa6";
 
 const Register = () => {
-  const authInfo = useContext(AuthContext);
-
+  const { createUser } = useContext(AuthContext);
+  const [showPassword, setShowPassword] = useState(false);
+  const [passwordError, setPasswordError] = useState("");
+  const [emailError, setEmailError] = useState("");
+  const navigate = useNavigate();
   const handleRegister = (e) => {
     e.preventDefault();
+
     const name = e.target.name.value;
     const photoURL = e.target.photoURL.value;
     const email = e.target.email.value;
     const password = e.target.password.value;
-    console.log(name, photoURL, email, password);
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@gmail\.com$/;
+    const passwordRegex =
+      /^(?=.*[!@#$%^&*()\-_=+[\]{};:'",.<>/?])(?=.*[A-Z])(?=.*\d).{6,}$/;
+    setEmailError("");
+    setPasswordError("");
+    if (!emailRegex.test(email)) {
+      return setEmailError("Email must end with @gmail.com");
+    }
+    if (!passwordRegex.test(password)) {
+      return setPasswordError("Password is invalid");
+    }
+
+    createUser(email, password)
+      .then(() => {
+        navigate("/");
+      })
+      .catch((error) => console.log(error.message));
   };
   return (
     <div className="py-10">
@@ -27,6 +48,7 @@ const Register = () => {
               className="input w-full"
               placeholder="name"
             />
+
             <label className="label">Photo URL</label>
             <input
               name="photoURL"
@@ -41,13 +63,26 @@ const Register = () => {
               className="input w-full"
               placeholder="Email"
             />
-            <label className="label">Password</label>
-            <input
-              name="password"
-              type="password"
-              className="input w-full"
-              placeholder="Password"
-            />
+            <p className="text-sm text-red-600">{emailError}</p>
+            <div className="relative">
+              <label className="label">Password</label>
+              <input
+                name="password"
+                type="password"
+                className="input w-full"
+                placeholder="Password"
+              />
+              <div className="absolute text-xl right-4 top-7">
+                {showPassword ? (
+                  <FaEyeSlash
+                    onClick={() => setShowPassword(false)}
+                  ></FaEyeSlash>
+                ) : (
+                  <FaEye onClick={() => setShowPassword(true)}></FaEye>
+                )}
+              </div>
+            </div>
+            <p className="text-sm text-red-600">{passwordError}</p>
             <button type="submit" className="btn btn-neutral mt-4">
               Register
             </button>
