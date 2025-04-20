@@ -3,6 +3,8 @@ import Navbar from "../components/Navbar";
 import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../providers/AuthProvider";
 import { FaEye, FaEyeSlash } from "react-icons/fa6";
+import { updateProfile } from "firebase/auth";
+import { auth } from "../firebase.config";
 
 const Register = () => {
   const { createUser } = useContext(AuthContext);
@@ -12,7 +14,6 @@ const Register = () => {
   const navigate = useNavigate();
   const handleRegister = (e) => {
     e.preventDefault();
-
     const name = e.target.name.value;
     const photoURL = e.target.photoURL.value;
     const email = e.target.email.value;
@@ -31,6 +32,16 @@ const Register = () => {
 
     createUser(email, password)
       .then(() => {
+        updateProfile(auth.currentUser, {
+          displayName: name,
+          photoURL: photoURL,
+        })
+          .then(() => {
+            navigate("/");
+          })
+          .catch((error) => {
+            console.log(error);
+          });
         navigate("/");
       })
       .catch((error) => console.log(error.message));
@@ -47,6 +58,7 @@ const Register = () => {
               type="text"
               className="input w-full"
               placeholder="name"
+              required
             />
 
             <label className="label">Photo URL</label>
@@ -62,15 +74,17 @@ const Register = () => {
               type="email"
               className="input w-full"
               placeholder="Email"
+              required
             />
             <p className="text-sm text-red-600">{emailError}</p>
             <div className="relative">
               <label className="label">Password</label>
               <input
                 name="password"
-                type="password"
+                type={showPassword ? "text" : "password"}
                 className="input w-full"
                 placeholder="Password"
+                required
               />
               <div className="absolute text-xl right-4 top-7">
                 {showPassword ? (

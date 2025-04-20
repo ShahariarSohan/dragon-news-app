@@ -1,11 +1,27 @@
-import React from "react";
+import React, { useContext } from "react";
+import { AuthContext } from "../providers/AuthProvider";
+import { GoogleAuthProvider } from "firebase/auth";
+import { useNavigate } from "react-router-dom";
 
 const Social = () => {
+  const { socialLogin } = useContext(AuthContext);
+  const navigate = useNavigate();
+  const googleProvider = new GoogleAuthProvider();
+  const handleSocialLogin = (provider) => {
+    socialLogin(provider)
+      .then(() => {
+        navigate("/");
+      })
+      .catch((error) => console.log(error.message));
+  };
   return (
     <div>
       <h3 className="font-bold">Login With</h3>
       <div className="space-y-5 my-5">
-        <button className="w-full btn bg-white text-black border-[#e5e5e5]">
+        <button
+          onClick={() => handleSocialLogin(googleProvider)}
+          className="w-full btn bg-white text-black border-[#e5e5e5]"
+        >
           <svg
             aria-label="Google logo"
             width="16"

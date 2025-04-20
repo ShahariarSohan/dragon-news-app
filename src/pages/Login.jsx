@@ -1,17 +1,28 @@
-import React, { useContext } from "react";
+import React, { useContext, useRef } from "react";
 import Navbar from "../components/Navbar";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../providers/AuthProvider";
 
 const Login = () => {
-  const { signIn } = useContext(AuthContext);
+  const { logIn, resetPassword } = useContext(AuthContext);
+  const emailRef = useRef();
+  const navigate = useNavigate();
   const handleLogin = (e) => {
     e.preventDefault();
     const email = e.target.email.value;
     const password = e.target.password.value;
 
-    signIn(email, password)
-      .then((result) => console.log(result.user))
+    logIn(email, password)
+      .then(() => navigate("/"))
+      .catch((error) => console.log(error.message));
+  };
+  const handleResetPassword = () => {
+    const email = emailRef.current.value;
+
+    resetPassword(email)
+      .then(() => {
+        alert("Password reset email sent");
+      })
       .catch((error) => console.log(error.message));
   };
   return (
@@ -22,6 +33,7 @@ const Login = () => {
           <fieldset className="fieldset ">
             <label className="label">Email</label>
             <input
+              ref={emailRef}
               name="email"
               type="email"
               className="input w-full"
@@ -35,7 +47,13 @@ const Login = () => {
               placeholder="Password"
             />
             <div>
-              <a className="link link-hover">Forgot password?</a>
+              <button
+                onClick={handleResetPassword}
+                type="button"
+                className="link link-hover"
+              >
+                Forgot password?
+              </button>
             </div>
             <button className="btn btn-neutral mt-4">Login</button>
           </fieldset>
